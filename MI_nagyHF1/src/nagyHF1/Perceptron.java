@@ -73,7 +73,6 @@ public class Perceptron {
 	}
 
 	protected Double Initialize(double u, double mu){
-		
 		// Gaussian distributed double value with mean 0.0, standard deviatation 1.0
 		double db = new Random().nextGaussian();
 		
@@ -84,7 +83,6 @@ public class Perceptron {
 		db += u;
 		
 		return  db;
-		
 	}
 
 }

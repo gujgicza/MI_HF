@@ -1,6 +1,8 @@
 package nagyHF1;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class Layer {
 	
@@ -15,10 +17,12 @@ public class Layer {
 		return neurons;
 	}
 	
-	public Layer(int neuronNum, int car) {
+	
+	public Layer(int neuronNum, int cardinality) {
+			
 		neurons = new ArrayList<>();
 		for (int i = 0; i < neuronNum; i++) {
-			neurons.add(new Perceptron(car));
+			neurons.add(new Perceptron(cardinality));
 		}
 		nextLayer = null;
 		prevLayer = null;
@@ -59,6 +63,9 @@ public class Layer {
 	}
 
 	private void calculateDeltas() {
+		/* perceptronnak nem kéne tudnia a layerekről:
+		 * getDelta paraméterei delták, és a hozzá tartozó súlyvektorok kéne legyenek.
+		 */
 		if (nextLayer == null) {
 			// TODO: végén csak a delta
 		}
@@ -66,5 +73,36 @@ public class Layer {
 		for (Perceptron perceptron : neurons) {
 			deltas.add(perceptron.getDelta(nextLayer.getNeurons()));
 		}
+	}
+	
+	public String getPerceptronsWeights() {
+		String weights = "";
+		
+		// writes the values of the perceptron's weights
+		boolean isFirstPerceptron = true;
+		for (Perceptron perceptron : neurons) {
+			if (!isFirstPerceptron)
+				weights += "\n";
+			else
+				isFirstPerceptron = false;
+			
+			String perWeights = "";
+			boolean isFirstWeight = true;
+			for (Double weight : perceptron.weights) {
+				if (!isFirstWeight) 
+					perWeights += ",";
+				else
+					isFirstWeight = false;
+				perWeights += weight.toString();
+			}
+			// writes out the bias too
+			perWeights += ",";
+			perWeights += perceptron.bias;
+			
+			weights += perWeights;
+		}
+		
+		
+		return weights;
 	}
 }
