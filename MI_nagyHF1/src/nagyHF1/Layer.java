@@ -1,8 +1,6 @@
 package nagyHF1;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class Layer {
 	
@@ -13,20 +11,22 @@ public class Layer {
 	ArrayList<Double> outputs;
 	ArrayList<Double> deltas;
 	
-	public ArrayList<Perceptron> getNeurons() {
-		return neurons;
+	public Layer(ArrayList<Perceptron> perceptrons) {
+		neurons = perceptrons;
+		nextLayer = null;
+		prevLayer = null;
+		outputs = null;
+		deltas = null;
 	}
 	
-	
-	public Layer(int neuronNum, int cardinality) {
+	public Layer(int neuronNum, int cardinality, boolean isLast) {
 			
 		neurons = new ArrayList<>();
 		for (int i = 0; i < neuronNum; i++) {
-			neurons.add(new Perceptron(cardinality));
+			neurons.add(new Perceptron(cardinality, isLast));
 		}
 		nextLayer = null;
 		prevLayer = null;
-		
 		outputs = null;
 		deltas = null;
 	}
@@ -38,31 +38,25 @@ public class Layer {
 	public void setPrevLayer(Layer prev) {
 		prevLayer = prev;
 	}
-
-	public ArrayList<Double> getLayerOutput() {
-		if (outputs == null)
-			calculateOutputs();
-		return outputs;
-	}
-
-	private void calculateOutputs() {
-		if (prevLayer == null) {
-			// TODO: bemeneti vektor
-		}
+	
+	
+	public ArrayList<Double> getLayerOutputs(ArrayList<Double> inputLayer) {
 		outputs = new ArrayList<>();
-		for (Perceptron perceptron : neurons) {
-			outputs.add(perceptron.getOutput(prevLayer.getLayerOutput()));
+		if (prevLayer == null) {
+			for (Perceptron perceptron : neurons) {
+				outputs.add(perceptron.getOutput(inputLayer));
+			}
+		}
+		else {
+			for (Perceptron perceptron : neurons) {
+				outputs.add(perceptron.getOutput(prevLayer.getLayerOutputs(inputLayer)));
+			}
 		}
 		
+		return outputs;		
 	}
 	
 	public ArrayList<Double> getLayerDeltas() {
-		if (deltas == null)
-			calculateDeltas();
-		return deltas;
-	}
-
-	private void calculateDeltas() {
 		/* perceptronnak nem kéne tudnia a layerekről:
 		 * getDelta paraméterei delták, és a hozzá tartozó súlyvektorok kéne legyenek.
 		 */
@@ -71,8 +65,10 @@ public class Layer {
 		}
 		deltas = new ArrayList<>();
 		for (Perceptron perceptron : neurons) {
-			deltas.add(perceptron.getDelta(nextLayer.getNeurons()));
+			deltas.add(perceptron.getDelta(nextLayer.neurons));
 		}
+		
+		return null;
 	}
 	
 	public String getPerceptronsWeights() {

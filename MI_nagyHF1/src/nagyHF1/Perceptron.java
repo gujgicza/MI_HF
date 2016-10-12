@@ -8,43 +8,49 @@ public class Perceptron {
 	List<Double> weights;
 	Double bias;
 	
+	boolean isLastLayer;
+	
 	Double outputReal;
 	Double outputNonLinear;
 	Double delta;
 	
 	// Initialize with random weights
-	public Perceptron(int card) {
+	public Perceptron(int card, boolean last) {
 		weights = new ArrayList<>();
 		for (int i = 0; i < card; i++) {
 			weights.add(Initialize(0.0, 0.1));
 		}
 		bias = 0.0;
 		outputNonLinear = null;
+		outputReal = null;
+		isLastLayer = last;
 	}
 	
 	// Initialize with given weights
-	public Perceptron(List<Double> w, double b) {
+	public Perceptron(List<Double> w, double b, boolean last) {
 		weights = new ArrayList<>();
 		for (Double weight : w) {
 			weights.add(weight);
 		}
 		bias = b;
 		outputNonLinear = null;
+		outputReal = null;
+		isLastLayer = last;
 	}
 	
-	public Double getOutput(List<Double> inputs){
-		if (outputNonLinear == null)
-			calculateOutput(inputs);
-		return outputNonLinear;	
-	}
 	
-	private void calculateOutput(List<Double> inputs) {
-		Double sum = 0.0;
-		for (Double in : inputs) {
-			sum += in * weights.get(inputs.indexOf(in));
+	public Double getOutput(List<Double> inputs) {
+		outputReal = 0.0;
+		for (int i = 0; i < inputs.size(); i++) {
+			outputReal += inputs.get(i) * weights.get(i);
 		}
-		sum += bias;
-		outputNonLinear = ReLu(sum);
+		outputReal += bias;
+		if (isLastLayer)
+			outputNonLinear = outputReal;
+		else
+			outputNonLinear = ReLu(outputReal);
+		
+		return outputNonLinear;
 	}
 	
 	public Double getDelta(List<Perceptron> nextNeurons) {

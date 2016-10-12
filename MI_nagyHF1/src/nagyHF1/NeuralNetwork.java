@@ -20,6 +20,20 @@ public class NeuralNetwork {
 		layers.add(layer);
 	}
 	
+	public ArrayList<Double> calculateOutputs(ArrayList<Double> inputLayer) {	
+		return layers.get(layers.size()-1).getLayerOutputs(inputLayer);
+	}
+
+	/* TODO:
+	 * calculate deltas meghívása a kimeneti rétegen
+	 * calculate outputs meghívása a bemeneti rétegen
+	 * clear outputs
+	 * clear deltas, ha újraszámolás van
+	 * tanítás meghívása
+	 */
+	
+	
+		
 	public String getWeights() {
 		String weights = "";
 		
@@ -34,13 +48,7 @@ public class NeuralNetwork {
 		
 		return weights;
 	}
+	
 
-	/* TODO:
-	 * calculate deltas meghívása a kimeneti rétegen
-	 * calculate outputs meghívása a bemeneti rétegen
-	 * clear outputs
-	 * clear deltas, ha újraszámolás van
-	 * tanítás meghívása
-	 */
 
 }

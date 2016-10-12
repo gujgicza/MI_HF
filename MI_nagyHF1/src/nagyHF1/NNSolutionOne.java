@@ -38,7 +38,7 @@ public class NNSolutionOne {
 				size = inputSize;
 			else
 				size = nn.layers.get(nn.layers.size()-1).neurons.size();
-			Layer tmp = new Layer(hiddenLayerSizes.get(i), size);
+			Layer tmp = new Layer(hiddenLayerSizes.get(i), size, false);
 			
 			nn.addLayer(tmp);
 		}
@@ -50,7 +50,7 @@ public class NNSolutionOne {
 		else
 			size = nn.layers.get(nn.layers.size()-1).neurons.size();
 		
-		nn.addLayer(new Layer(outputLayerSize, size));
+		nn.addLayer(new Layer(outputLayerSize, size, true));
 		
 		
 		// Writing the output		
