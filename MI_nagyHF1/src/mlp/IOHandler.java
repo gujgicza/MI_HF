@@ -65,7 +65,7 @@ public class IOHandler {
 			oneInput = new ArrayList<>();
 			s = br.readLine();
 			in = s.split(",");
-			for (int j = 0; j< in.length - 1; j++) {
+			for (int j = 0; j< in.length; j++) {
 				oneInput.add(Double.parseDouble(in[j]));
 			}
 			allInput.add(oneInput);
