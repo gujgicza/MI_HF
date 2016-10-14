@@ -75,6 +75,7 @@ public class IOHandler {
 	
 	
 	// Writer part:
+	// TODO: write to any kind of ostream 
 	
 	public void writeArchitecture(ArrayList<Integer> arc) {
 		String string = "";

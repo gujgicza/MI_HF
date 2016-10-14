@@ -22,7 +22,7 @@ public class NNSolutionOne {
 		
 		// Initializing and creating the Neural Network
 		handler.setArchitecture(inputSize, layerSizes, outputSize);
-		handler.setWeightsAndBiases(null, null);
+		//handler.setWeightsAndBiases(null, null);
 		handler.createNeuralNetwork();
 		
 		// Calculate the solution

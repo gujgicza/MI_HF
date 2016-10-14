@@ -14,6 +14,16 @@ public class NeuronLayer {
 		prevLayer = null;
 		nextLayer = null;
 	}
+	
+	protected void setNeurons(Integer neuronNum, int cardinal) {
+		neurons = new ArrayList<>();
+		for (int i = 0; i<neuronNum; i++)
+			neurons.add(new Neuron(cardinal));
+	}
+
+	public NeuronLayer(Integer neuronNum, int cardinal) {
+		setNeurons(neuronNum, cardinal);
+	}
 
 	public ArrayList<ArrayList<Double>> getWeights() {
 		// TODO Auto-generated method stub

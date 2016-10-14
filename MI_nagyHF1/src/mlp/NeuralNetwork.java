@@ -1,6 +1,7 @@
 package mlp;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class NeuralNetwork {
 	
@@ -10,49 +11,73 @@ public class NeuralNetwork {
 	
 	public NeuralNetwork(int inputSize, ArrayList<Integer> layerSizes,
 			ArrayList<ArrayList<Double>> weights, ArrayList<Double> biases) {
+		//TODO: ez nagyon ronda
 		int idx = 0;;
 		this.inputSize = inputSize;
 		layers = new ArrayList<>();
 		
-		ArrayList<Neuron> firstLayerNeurons = new ArrayList<>();
-		for (int j = 0; j < layerSizes.get(0); j ++) {
-			ArrayList<Double> neuronWeights = new ArrayList<>();
- 			for (int k = 0; k < inputSize; k++) {
-				neuronWeights.add(weights.get(idx).get(k));
-				//biases.get(idx);
-			}
- 			firstLayerNeurons.add(new Neuron(neuronWeights, biases.get(idx)));
- 			idx++;
-		}
-		addLayer(new NeuronLayer(firstLayerNeurons));
-		
-		for (int i = 1; i < layerSizes.size()-1; i++) {
-			ArrayList<Neuron> hiddenLayerNeurons = new ArrayList<>();
-			for (int j = 0; j < layerSizes.get(i); j ++) {
-				ArrayList<Double> neuronWeights = new ArrayList<>();
-				for (int k = 0; k < layerSizes.get(i-1); k++) {
-					neuronWeights.add(weights.get(idx).get(k));
-					//biases.get(idx);
-				}
-	 			hiddenLayerNeurons.add(new Neuron(neuronWeights, biases.get(idx)));
-	 			idx++;
-			}
-			addLayer(new NeuronLayer(hiddenLayerNeurons));
+		if(weights == null && biases == null) {
+			if (layerSizes.size() > 1) {
+				addLayer(new NeuronLayer(layerSizes.get(0), inputSize));
+				int i;
+				for(i = 1; i < layerSizes.size() - 1; i++)
+					addLayer(new NeuronLayer(layerSizes.get(i), layerSizes.get(i - 1)));
+				addLayer(new LastNeuronLayer(layerSizes.get(i), layerSizes.get(i-1)));
 
-		}
-		
-		ArrayList<Neuron> lastLayerNeurons = new ArrayList<>();
-		for (int j = 0; j < layerSizes.get(layerSizes.size()-1); j ++) {
-			ArrayList<Double> neuronWeights = new ArrayList<>();
- 			for (int k = 0; k < layerSizes.get(layerSizes.size()-2); k++) {
-				neuronWeights.add(weights.get(idx).get(k));
-				//biases.get(idx);
+			} else {
+				addLayer(new NeuronLayer(layerSizes.get(0), inputSize));
 			}
- 			lastLayerNeurons.add(new OutputNeuron(neuronWeights, biases.get(idx)));
- 			idx++;
 		}
-		addLayer(new NeuronLayer(lastLayerNeurons));
-		
+		else {
+			if (layerSizes.size() > 1) {
+				ArrayList<Neuron> firstLayerNeurons = new ArrayList<>();
+				for (int j = 0; j < layerSizes.get(0); j++) {
+					ArrayList<Double> neuronWeights = new ArrayList<>();
+					for (int k = 0; k < inputSize; k++) {
+						neuronWeights.add(weights.get(idx).get(k));
+					}
+					firstLayerNeurons.add(new Neuron(neuronWeights, biases.get(idx)));
+					idx++;
+				}
+				addLayer(new NeuronLayer(firstLayerNeurons));
+
+				for (int i = 1; i < layerSizes.size() - 1; i++) {
+					ArrayList<Neuron> hiddenLayerNeurons = new ArrayList<>();
+					for (int j = 0; j < layerSizes.get(i); j++) {
+						ArrayList<Double> neuronWeights = new ArrayList<>();
+						for (int k = 0; k < layerSizes.get(i - 1); k++) {
+							neuronWeights.add(weights.get(idx).get(k));
+						}
+						hiddenLayerNeurons.add(new Neuron(neuronWeights, biases.get(idx)));
+						idx++;
+					}
+					addLayer(new NeuronLayer(hiddenLayerNeurons));
+				}
+
+				ArrayList<Neuron> lastLayerNeurons = new ArrayList<>();
+				for (int j = 0; j < layerSizes.get(layerSizes.size() - 1); j++) {
+					ArrayList<Double> neuronWeights = new ArrayList<>();
+					for (int k = 0; k < layerSizes.get(layerSizes.size() - 2); k++) {
+						neuronWeights.add(weights.get(idx).get(k));
+					}
+					lastLayerNeurons.add(new OutputNeuron(neuronWeights, biases.get(idx)));
+					idx++;
+				}
+				addLayer(new NeuronLayer(lastLayerNeurons));
+			} else {
+				ArrayList<Neuron> lastLayerNeurons = new ArrayList<>();
+				for (int j = 0; j < layerSizes.get(layerSizes.size() - 1); j++) {
+					ArrayList<Double> neuronWeights = new ArrayList<>();
+					for (int k = 0; k < inputSize; k++) {
+						neuronWeights.add(weights.get(idx).get(k));
+					}
+					lastLayerNeurons.add(new OutputNeuron(neuronWeights, biases.get(idx)));
+					idx++;
+				}
+				addLayer(new NeuronLayer(lastLayerNeurons));
+			}
+		}
+
 	}
 	
 	private void addLayer(NeuronLayer layer) {
