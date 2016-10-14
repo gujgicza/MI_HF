@@ -71,33 +71,7 @@ public class NeuralNetworkHandler {
 	
 	public ArrayList<ArrayList<ArrayList<Double>>> getWeightsAndBiases() {
 		return nn.getWeightsAndBiases();
-	}
-	
-//	public String getWeightsInStringForNNSolutionOne() {
-//		String string = "";
-//		
-//		int index = 0;
-//		boolean isFirstNeuron = true;
-//		for (ArrayList<Double> neuron : weights) {
-//			if (!isFirstNeuron)
-//				string += "\n";
-//			else
-//				isFirstNeuron = false;
-//			boolean isFirstW = true;
-//			for (Double weight : neuron) {
-//				if (!isFirstW)
-//					string += ",";
-//				else
-//					isFirstW = false;
-//				string += weight.toString();
-//			}
-//			string += "," + biases.get(index).toString();
-//			index++;
-//		}
-//		
-//		return string;
-//	}
-	
+	}	
 	
 	public ArrayList<Double> getOutput(ArrayList<Double> input) {
 		return nn.getOutput(input);
@@ -110,15 +84,16 @@ public class NeuralNetworkHandler {
 		return allOutputs;
 	}
 	
-	public ArrayList<ArrayList<Double>> getPartialDerivates(ArrayList<Double> Errors) {		
-		return nn.backPropagation(Errors);		
+	public ArrayList<ArrayList<ArrayList<Double>>> getPartialDerivates(ArrayList<Double> errors, ArrayList<Double> input) {		
+		nn.backPropagation(errors);
+		return nn.getPartialDerivates(input);
 	}
 	
 	public void training() {
 		for (int i = 0; i < trainingS; i++) {
 			ArrayList<Double> realOutput = nn.getOutput(inputs.get(i));
 			ArrayList<Double> currentErrors = nn.calculateError(expectedOutput.get(i), realOutput);
-			ArrayList<ArrayList<Double>> partialDerivates = getPartialDerivates(currentErrors);
+			ArrayList<ArrayList<ArrayList<Double>>> partialDerivates = getPartialDerivates(currentErrors, inputs.get(i));
 			nn.modifyWeights(partialDerivates);
 		}
 	}

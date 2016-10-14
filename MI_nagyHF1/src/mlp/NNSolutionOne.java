@@ -31,7 +31,7 @@ public class NNSolutionOne {
 		// Writing out the solution
 		iohandler.writeArchitecture(architechture);
 		br.close();
-		iohandler.writeWeights(weights);
+		iohandler.writeWeightsAndBiases(weights);
 	}
 
 }

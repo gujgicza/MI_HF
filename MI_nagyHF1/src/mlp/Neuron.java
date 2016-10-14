@@ -7,6 +7,8 @@ public class Neuron {
 
 	ArrayList<Double> weights;
 	ArrayList<Double> parcDerivedWeights;
+	
+	Double delta;
 
 	Double bias;
 	Double parcDerivedBias;
@@ -16,6 +18,7 @@ public class Neuron {
 
 	public Neuron(ArrayList<Double> neuronWeights, Double neuronBias) {
 		weights = neuronWeights;
+		parcDerivedWeights = new ArrayList<>();
 		bias = neuronBias;
 	}
 
@@ -40,6 +43,37 @@ public class Neuron {
 		}
 
 		return outputNonLinear;
+	}
+
+	public ArrayList<Double> getPartialDerivates(ArrayList<Double> input) {
+		if (parcDerivedWeights == null && parcDerivedBias == null) {
+			parcDerivedBias = delta;
+			parcDerivedWeights = new ArrayList<>();
+			for (int i = 0; i < input.size(); i++)
+				parcDerivedWeights.add(input.get(i)*delta);
+		}
+		ArrayList<Double> partialDerivatesN = new ArrayList<>(parcDerivedWeights);
+		partialDerivatesN.add(parcDerivedBias);
+		return partialDerivatesN;
+	}
+
+	public Double calculateDelta(NeuronLayer nextLayer, ArrayList<Double> nextLayerDeltas, int idx) {
+		if (delta == null) {
+			int sum = 0;
+			for (int i = 0; i < nextLayer.neurons.size(); i++) {
+				sum += nextLayer.neurons.get(i).weights.get(idx) * nextLayer.neurons.get(i).delta;
+			}
+			delta = sum * derivateOutput(outputNonLinear);
+		}
+		
+		return delta;
+	}
+
+	private Double derivateOutput(Double outputNonLinear) {
+		if (outputNonLinear > 0)
+			return 1.0;
+		else
+			return 0.0;
 	}
 
 }

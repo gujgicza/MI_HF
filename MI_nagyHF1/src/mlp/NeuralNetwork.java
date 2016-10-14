@@ -71,23 +71,50 @@ public class NeuralNetwork {
 	}
 
 	// returns the partialDerivates of the weights and biases
-	public ArrayList<ArrayList<Double>> backPropagation(ArrayList<Double> currentErrors) {
-		// TODO Auto-generated method stub
-		return null;
+	public void backPropagation(ArrayList<Double> currentErrors) {
+		clearPartialDerivates();
+		clearDeltas();
+		layers.get(0).calculateDeltas(currentErrors);
+	}
+	
+	private void clearDeltas() {
+		for (NeuronLayer neuronLayer : layers) {
+			for (Neuron neuron : neuronLayer.neurons) {
+				neuron.delta = null;
+			}
+		}		
 	}
 
-	public void modifyWeights(ArrayList<ArrayList<Double>> partialDerivates) {
+	public ArrayList<ArrayList<ArrayList<Double>>> getPartialDerivates(ArrayList<Double> input) {
+		ArrayList<ArrayList<ArrayList<Double>>> partialDerivatesNN = new ArrayList<>();
+		for (NeuronLayer layer : layers) {
+			partialDerivatesNN.add(layer.getPartialDerivates(input));
+		}
+		return partialDerivatesNN;
+	}
+
+	private void clearPartialDerivates() {
+		for (NeuronLayer neuronLayer : layers) {
+			for (Neuron neuron : neuronLayer.neurons) {
+				for (Double partialDerivedW : neuron.parcDerivedWeights) {
+					partialDerivedW = null;
+				}
+				neuron.parcDerivedBias = null;
+			}
+		}
+	}
+
+	public void modifyWeights(ArrayList<ArrayList<ArrayList<Double>>> partialDerivates) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	public ArrayList<ArrayList<ArrayList<Double>>> getWeightsAndBiases() {
-		ArrayList<ArrayList<ArrayList<Double>>> weightsNN = new ArrayList<>();
+		ArrayList<ArrayList<ArrayList<Double>>> weightsAndBiasesNN = new ArrayList<>();
 		for (NeuronLayer layer : layers) {
-			weightsNN.add(layer.getWeightsAndBiases());
+			weightsAndBiasesNN.add(layer.getWeightsAndBiases());
 		}
-		return weightsNN;
+		return weightsAndBiasesNN;
 	}
-	
 
 }

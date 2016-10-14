@@ -51,7 +51,7 @@ public class IOHandler {
 		return biases;
 	}
 	
-	int getTrainingSetNumber(BufferedReader br) throws IOException{
+	int getInputSetNumber(BufferedReader br) throws IOException{
 		String num = br.readLine();
 		return Integer.parseInt(num);
 	}
@@ -94,7 +94,7 @@ public class IOHandler {
 		System.out.println(trainingnum);
 	}
 	
-	public void writeWeights(ArrayList<ArrayList<ArrayList<Double>>> weights) {
+	public void writeWeightsAndBiases(ArrayList<ArrayList<ArrayList<Double>>> weights) {
 		StringBuilder string = new StringBuilder();
 		
 		boolean isFirstNeuron = true;
@@ -139,6 +139,10 @@ public class IOHandler {
 			}
 		}
 		System.out.println(string);
+	}
+
+	public void writePartialDerivates(ArrayList<ArrayList<ArrayList<Double>>> allPartialDerivates) {
+		writeWeightsAndBiases(allPartialDerivates);	
 	}
 
 }
