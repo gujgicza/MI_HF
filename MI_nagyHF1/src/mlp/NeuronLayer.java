@@ -9,23 +9,20 @@ public class NeuronLayer {
 	NeuronLayer nextLayer;
 	
 	public NeuronLayer(ArrayList<Neuron> neurons) {
-		// TODO Auto-generated constructor stub
 		this.neurons = neurons;
 		prevLayer = null;
 		nextLayer = null;
 	}
 
-	public ArrayList<ArrayList<Double>> getWeights() {
-		// TODO Auto-generated method stub
+	public ArrayList<ArrayList<Double>> getWeightsAndBiases() {
 		ArrayList<ArrayList<Double>> weightsL = new ArrayList<>();
 		for (Neuron neuron : neurons) {
-			weightsL.add(neuron.getWeights());
+			weightsL.add(neuron.getWeightsAndBias());
 		}
 		return weightsL;
 	}
 
 	public ArrayList<Double> getLayerOutputs(ArrayList<Double> input) {
-		// TODO Auto-generated method stub
 		ArrayList<Double> outputs = new ArrayList<>();
 		ArrayList<Double> param;
 		if (prevLayer == null) 

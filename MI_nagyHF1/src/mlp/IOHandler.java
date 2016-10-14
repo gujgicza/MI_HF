@@ -75,7 +75,7 @@ public class IOHandler {
 	
 	
 	// Writer part:
-	// TODO: write to any kind of ostream 
+	// TODO: write to any ostream 
 	
 	public void writeArchitecture(ArrayList<Integer> arc) {
 		String string = "";
@@ -95,23 +95,23 @@ public class IOHandler {
 	}
 	
 	public void writeWeights(ArrayList<ArrayList<ArrayList<Double>>> weights) {
-		String string = "";
+		StringBuilder string = new StringBuilder();
 		
 		boolean isFirstNeuron = true;
 		for (ArrayList<ArrayList<Double>> layerW : weights) {
 			for (ArrayList<Double> neuronW : layerW) {
 				if (!isFirstNeuron)
-					string += "\n";
+					string.append("\n");
 				else
 					isFirstNeuron = false;
 				
 				boolean isFirstW = true;
 				for (Double w : neuronW) {
 					if (!isFirstW) 
-						string += ",";
+						string.append(",");
 					else
 						isFirstW = false;
-					string += w.toString();
+					string.append(w);
 				}
 			}
 			
@@ -120,22 +120,22 @@ public class IOHandler {
 	}
 
 	public void writeAllOutputs(ArrayList<ArrayList<Double>> allOutputs) {
-		String string = "";
+		StringBuilder string = new StringBuilder();
 		
 		boolean isFirstOutput = true;
 		for (ArrayList<Double> output : allOutputs) {
 			if (!isFirstOutput)
-				string += "\n";
+				string.append("\n");
 			else
 				isFirstOutput = false;
 			
 			boolean isFirstDouble = true;
 			for (Double double1 : output) {
 				if (!isFirstDouble)
-					string += ",";
+					string.append(",");
 				else
 					isFirstDouble = false;
-				string += double1.toString();
+				string.append(double1);
 			}
 		}
 		System.out.println(string);

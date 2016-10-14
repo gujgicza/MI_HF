@@ -51,9 +51,16 @@ public class NeuralNetwork {
 		layers.add(layer);
 	}
 	
-	
+	public void clearOutput() {
+		for (NeuronLayer neuronLayer : layers) {
+			for (Neuron neuron : neuronLayer.neurons) {
+				neuron.outputNonLinear = null;
+			}
+		}
+	}
 	
 	public ArrayList<Double> getOutput(ArrayList<Double> input) {
+		clearOutput();
 		return layers.get(layers.size()-1).getLayerOutputs(input);
 	}
 
@@ -74,11 +81,10 @@ public class NeuralNetwork {
 		
 	}
 
-	public ArrayList<ArrayList<ArrayList<Double>>> getWeights() {
-		// TODO Auto-generated method stub
+	public ArrayList<ArrayList<ArrayList<Double>>> getWeightsAndBiases() {
 		ArrayList<ArrayList<ArrayList<Double>>> weightsNN = new ArrayList<>();
 		for (NeuronLayer layer : layers) {
-			weightsNN.add(layer.getWeights());
+			weightsNN.add(layer.getWeightsAndBiases());
 		}
 		return weightsNN;
 	}

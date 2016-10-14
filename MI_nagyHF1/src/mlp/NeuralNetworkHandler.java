@@ -69,34 +69,34 @@ public class NeuralNetworkHandler {
 		nn = new NeuralNetwork(inputSize, layerSizes, weights, biases);
 	}
 	
-	public ArrayList<ArrayList<ArrayList<Double>>> getWeights() {
-		return nn.getWeights();
+	public ArrayList<ArrayList<ArrayList<Double>>> getWeightsAndBiases() {
+		return nn.getWeightsAndBiases();
 	}
 	
-	public String getWeightsInStringForNNSolutionOne() {
-		String string = "";
-		
-		int index = 0;
-		boolean isFirstNeuron = true;
-		for (ArrayList<Double> neuron : weights) {
-			if (!isFirstNeuron)
-				string += "\n";
-			else
-				isFirstNeuron = false;
-			boolean isFirstW = true;
-			for (Double weight : neuron) {
-				if (!isFirstW)
-					string += ",";
-				else
-					isFirstW = false;
-				string += weight.toString();
-			}
-			string += "," + biases.get(index).toString();
-			index++;
-		}
-		
-		return string;
-	}
+//	public String getWeightsInStringForNNSolutionOne() {
+//		String string = "";
+//		
+//		int index = 0;
+//		boolean isFirstNeuron = true;
+//		for (ArrayList<Double> neuron : weights) {
+//			if (!isFirstNeuron)
+//				string += "\n";
+//			else
+//				isFirstNeuron = false;
+//			boolean isFirstW = true;
+//			for (Double weight : neuron) {
+//				if (!isFirstW)
+//					string += ",";
+//				else
+//					isFirstW = false;
+//				string += weight.toString();
+//			}
+//			string += "," + biases.get(index).toString();
+//			index++;
+//		}
+//		
+//		return string;
+//	}
 	
 	
 	public ArrayList<Double> getOutput(ArrayList<Double> input) {
