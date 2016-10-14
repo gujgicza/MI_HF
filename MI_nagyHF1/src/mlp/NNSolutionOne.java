@@ -8,37 +8,30 @@ import java.util.ArrayList;
 public class NNSolutionOne {
 
 	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
 		
 		NeuralNetworkHandler handler = new NeuralNetworkHandler();
-		Writer writer = new Writer();
+		IOHandler iohandler = new IOHandler();
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
 		// Reading the inputs
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        String s = br.readLine();
-		
-		String[] params = s.split(",");
+		ArrayList<Integer> architechture = iohandler.getArchitect(br);
+		ArrayList<Integer> layerSizes = new ArrayList<>(architechture);
+		int inputSize = layerSizes.remove(0);
+		int outputSize = layerSizes.get(layerSizes.size()-1);
 
-		int inputSize = Integer.parseInt(params[0]);
-		int outputLayerSize = Integer.parseInt(params[params.length-1]);
-		
-		ArrayList<Integer> layerSizes = new ArrayList<>();
-		for (int i = 1; i < params.length -1; i++)
-			layerSizes.add(Integer.parseInt(params[i]));
-		layerSizes.add(outputLayerSize);
 		
 		// Initializing and creating the Neural Network
-		handler.setArchitecture(inputSize, layerSizes, outputLayerSize);
+		handler.setArchitecture(inputSize, layerSizes, outputSize);
 		handler.setWeightsAndBiases(null, null);
 		handler.createNeuralNetwork();
+		
+		// Calculate the solution
 		ArrayList<ArrayList<ArrayList<Double>>> weights = handler.getWeights();
 		
-		String outNNSolutionOne = writer.weightsToString(weights);
 		
 		// Writing out the solution
-		System.out.println(s);
-		System.out.println(outNNSolutionOne);
-
+		iohandler.writeArchitecture(architechture);
+		iohandler.writeWeights(weights);
 	}
 
 }

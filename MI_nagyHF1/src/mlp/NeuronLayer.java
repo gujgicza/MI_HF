@@ -11,6 +11,8 @@ public class NeuronLayer {
 	public NeuronLayer(ArrayList<Neuron> neurons) {
 		// TODO Auto-generated constructor stub
 		this.neurons = neurons;
+		prevLayer = null;
+		nextLayer = null;
 	}
 
 	public ArrayList<ArrayList<Double>> getWeights() {

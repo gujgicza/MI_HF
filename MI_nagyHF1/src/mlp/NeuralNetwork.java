@@ -44,7 +44,7 @@ public class NeuralNetwork {
 		ArrayList<Neuron> lastLayerNeurons = new ArrayList<>();
 		for (int j = 0; j < layerSizes.get(layerSizes.size()-1); j ++) {
 			ArrayList<Double> neuronWeights = new ArrayList<>();
- 			for (int k = 0; k < inputSize; k++) {
+ 			for (int k = 0; k < layerSizes.get(layerSizes.size()-2); k++) {
 				neuronWeights.add(weights.get(idx).get(k));
 				//biases.get(idx);
 			}
