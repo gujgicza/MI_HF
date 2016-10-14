@@ -13,14 +13,7 @@ public class Neuron {
 	
 	Double outputReal;
 	Double outputNonLinear;
-	
-	public Neuron(int cardinal) {
-		weights = new ArrayList<>();
-		for (int i = 0; i < cardinal; i++) {
-			weights.add(new Random().nextGaussian()*0.1);
-		}
-		bias = 0.0;
-	}
+
 	
 	public Neuron(ArrayList<Double> neuronWeights, Double neuronBias) {
 		// TODO Auto-generated constructor stub

@@ -33,20 +33,16 @@ public class NeuralNetworkHandler {
 		if (w == null && b == null) {
 			ArrayList<ArrayList<Double>> weightParams = new ArrayList<>();
 			ArrayList<Double> biasParams = new ArrayList<>();
-
-			for (int i = 0; i < layerSizes.get(0); i++) {
-				ArrayList<Double> currNeuronWeights = new ArrayList<>();
-				for (int j = 0; j < inputSize; j++) {
-					currNeuronWeights.add(new Random().nextGaussian() * 0.1);
-				}
-				weightParams.add(currNeuronWeights);
-				biasParams.add(0.0);
-			}
-
-			for (int i = 1; i < layerSizes.size(); i++) {
+			
+			int size;
+			for (int i = 0; i < layerSizes.size(); i++) {
+				if (i == 0)
+					size = inputSize;
+				else
+					size = layerSizes.get(i-1);
 				for (int k = 0; k < layerSizes.get(i); k++) {
 					ArrayList<Double> currNeuronWeights = new ArrayList<>();
-					for (int j = 0; j < layerSizes.get(i - 1); j++) {
+					for (int j = 0; j < size; j++) {
 						currNeuronWeights.add(new Random().nextGaussian() * 0.1);
 					}
 					weightParams.add(currNeuronWeights);
@@ -76,6 +72,32 @@ public class NeuralNetworkHandler {
 	public ArrayList<ArrayList<ArrayList<Double>>> getWeights() {
 		return nn.getWeights();
 	}
+	
+	public String getWeightsInStringForNNSolutionOne() {
+		String string = "";
+		
+		int index = 0;
+		boolean isFirstNeuron = true;
+		for (ArrayList<Double> neuron : weights) {
+			if (!isFirstNeuron)
+				string += "\n";
+			else
+				isFirstNeuron = false;
+			boolean isFirstW = true;
+			for (Double weight : neuron) {
+				if (!isFirstW)
+					string += ",";
+				else
+					isFirstW = false;
+				string += weight.toString();
+			}
+			string += "," + biases.get(index).toString();
+			index++;
+		}
+		
+		return string;
+	}
+	
 	
 	public ArrayList<Double> getOutput(ArrayList<Double> input) {
 		return nn.getOutput(input);

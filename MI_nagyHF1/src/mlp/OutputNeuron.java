@@ -9,11 +9,6 @@ public class OutputNeuron extends Neuron{
 		// TODO Auto-generated constructor stub
 	}
 
-	public OutputNeuron(Integer integer) {
-		super(integer);
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public double ReLu(double x) {
 		return x;

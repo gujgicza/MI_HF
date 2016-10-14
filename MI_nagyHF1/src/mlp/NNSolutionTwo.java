@@ -40,7 +40,8 @@ public class NNSolutionTwo {
 
 		// Writing out the solution
 		iohandler.writeTrainingNum(trainingNum);
-		iohandler.writeAllOutputs(allOutputs);		
+		iohandler.writeAllOutputs(allOutputs);	
+		br.close();
 	}
 
 }
