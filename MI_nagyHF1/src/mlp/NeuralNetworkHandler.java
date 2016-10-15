@@ -134,7 +134,7 @@ public class NeuralNetworkHandler {
 				squareError += err * err;
 			}
 		}
-		squareError = squareError / (validationS + outputSize);
+		squareError /= (validationS * outputSize);
 		squareErrors.add(squareError);
 	}
 
