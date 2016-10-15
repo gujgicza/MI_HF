@@ -36,7 +36,7 @@ public class NNSolutionThree {
 		
 		// Creating the errors
 		ArrayList<Double> errors = new ArrayList<>();
-		for (int i = 0; i < inputSize; i++)
+		for (int i = 0; i < outputSize; i++)
 			errors.add(1.0);
 
 		// Calculate the solution

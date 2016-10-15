@@ -49,40 +49,21 @@ public class NeuronLayer {
 		return partialDerivatesL;
 	}
 
-	public ArrayList<Double> calculateDeltas(ArrayList<Double> currentErrors) {
-		ArrayList<Double> deltasL = new ArrayList<>();
+	public void calculateDeltas(ArrayList<Double> currentErrors) {
 		NeuronLayer nextLayerParams;
-		ArrayList<Double> nextLayerDeltas;
 		int idx = 0;
 		if (nextLayer == null) {
-			nextLayerDeltas = currentErrors;
-			ArrayList<Neuron> layerNeurons = new ArrayList<>();
 			for (int i = 0; i < currentErrors.size(); i++) {
-				ArrayList<Double> errorW = new ArrayList<>();
-				for (int j = 0; j < neurons.size(); j++) {
-					if (j == i)
-						errorW.add(1.0);
-					else
-						errorW.add(0.0);		
-				}
-				Neuron errorNeuron = new Neuron(errorW, currentErrors.get(i));
-				errorNeuron.delta = currentErrors.get(i);
-				layerNeurons.add(errorNeuron);
+				neurons.get(i).delta = currentErrors.get(i);
 			}
-			NeuronLayer errorLayer = new NeuronLayer(layerNeurons);
-			nextLayerParams = errorLayer;
 		}
 		else {
 			nextLayerParams = nextLayer;
-			nextLayerDeltas = nextLayer.calculateDeltas(currentErrors);
+			nextLayer.calculateDeltas(currentErrors);
+
+			for (Neuron neuron : neurons) {
+				neuron.calculateDelta(nextLayerParams, idx++);
+			}
 		}
-		for (Neuron neuron : neurons) {
-			deltasL.add(neuron.calculateDelta(nextLayerParams, nextLayerDeltas,  idx++));
-		}
-		return deltasL;
-		
 	}
-
-	
-
 }
