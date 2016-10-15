@@ -46,7 +46,7 @@ public class Neuron {
 	}
 
 	public ArrayList<Double> getPartialDerivates(ArrayList<Double> input) {
-		if (parcDerivedWeights.isEmpty() && parcDerivedBias == null) {
+		if (parcDerivedWeights.isEmpty() || parcDerivedBias == null) {
 			parcDerivedBias = delta;
 			parcDerivedWeights = new ArrayList<>();
 			for (int i = 0; i < input.size(); i++)
@@ -74,6 +74,16 @@ public class Neuron {
 			return 1.0;
 		else
 			return 0.0;
+	}
+
+	
+	public void modifyWeightsAndBiases(ArrayList<Double> partialDerivates, double mu) {
+		int i;
+		for (i = 0; i < weights.size(); i++) {
+			double newWeight = weights.get(i) + 2 * mu * partialDerivates.get(i);
+			weights.set(i, newWeight);
+		}
+		bias += 2 * mu * partialDerivates.get(i);
 	}
 
 }

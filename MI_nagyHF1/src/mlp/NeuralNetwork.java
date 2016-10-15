@@ -64,12 +64,6 @@ public class NeuralNetwork {
 		return layers.get(layers.size()-1).getLayerOutputs(input);
 	}
 
-	public ArrayList<Double> calculateError(ArrayList<Double> expectedOutput, ArrayList<Double> realOutput) {
-		return null;
-		// TODO Auto-generated method stub
-		
-	}
-
 	// returns the partialDerivates of the weights and biases
 	public void backPropagation(ArrayList<Double> currentErrors) {
 		clearPartialDerivates();
@@ -104,8 +98,10 @@ public class NeuralNetwork {
 		}
 	}
 
-	public void modifyWeights(ArrayList<ArrayList<ArrayList<Double>>> partialDerivates) {
-		// TODO Auto-generated method stub
+	public void modifyWeightsAndBiases(ArrayList<ArrayList<ArrayList<Double>>> partialDerivates, double mu) {
+		for (int i = 0; i < partialDerivates.size(); i++) {
+			layers.get(i).modifyWeightsAndBiases(partialDerivates.get(i), mu);
+		}
 		
 	}
 

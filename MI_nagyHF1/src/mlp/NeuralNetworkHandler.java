@@ -15,13 +15,15 @@ public class NeuralNetworkHandler {
 
 	ArrayList<ArrayList<Double>> inputs;
 	ArrayList<ArrayList<Double>> expectedOutput;
+	
+	ArrayList<Double> squareErrors;
 
 	int trainingS;
 	int validationS;
 
 	double relationS;
 	double mu;
-	int epochNum;
+	double epochNum;
 
 	public void setArchitecture(int in, ArrayList<Integer> hidden, int out) {
 		inputSize = in;
@@ -61,6 +63,14 @@ public class NeuralNetworkHandler {
 		inputs = in;
 	}
 	
+	public void setTrainingParams(ArrayList<Double> trainingParams) {
+		epochNum = trainingParams.remove(0);
+		mu = trainingParams.remove(0);
+		relationS = trainingParams.remove(0);
+		trainingS = (int) Math.floor(inputs.size()*relationS);
+		validationS = inputs.size() - trainingS;
+	}
+	
 	public void setExpectedOutput(ArrayList<ArrayList<Double>> expectedOut) { 
 		expectedOutput = expectedOut;
 	}
@@ -89,34 +99,48 @@ public class NeuralNetworkHandler {
 		return nn.getPartialDerivates(input);
 	}
 	
-	public void training() {
+	public void epoch() {
 		for (int i = 0; i < trainingS; i++) {
 			ArrayList<Double> realOutput = nn.getOutput(inputs.get(i));
-			ArrayList<Double> currentErrors = nn.calculateError(expectedOutput.get(i), realOutput);
+			ArrayList<Double> currentErrors = calculateError(expectedOutput.get(i), realOutput);
 			ArrayList<ArrayList<ArrayList<Double>>> partialDerivates = getPartialDerivates(currentErrors, inputs.get(i));
-			nn.modifyWeights(partialDerivates);
+			nn.modifyWeightsAndBiases(partialDerivates, mu);
 		}
 	}
 
-	public void epoch() {
+	private ArrayList<Double> calculateError(ArrayList<Double> expectedOutput, ArrayList<Double> realOutput) {
+		ArrayList<Double> error = new ArrayList<>();
+		for (int i = 0; i < expectedOutput.size(); i++)
+			error.add(expectedOutput.get(i) - realOutput.get(i));
+		return error;
+	}
+
+	public void training() {
+		squareErrors = new ArrayList<>();
 		for (int i = 0; i < epochNum; i++) {
-			training();
+			epoch();
 			validate();
 		}
 	}
 
-	public double validate() {
+	public void validate() {
 		double squareError = 0.0;
-		ArrayList<ArrayList<Double>> errors = new ArrayList<>();
+		ArrayList<Double> realOutput;
+		ArrayList<Double> currentErrors;
 		for (int i = 0; i < validationS; i++) {
-			ArrayList<Double> realOutput = nn.getOutput(inputs.get(i + trainingS));
-			ArrayList<Double> currentErrors = nn.calculateError(expectedOutput.get(i + trainingS), realOutput);
+			realOutput = nn.getOutput(inputs.get(i + trainingS));
+			currentErrors = calculateError(expectedOutput.get(i + trainingS), realOutput);
 			for (Double err : currentErrors) {
 				squareError += err * err;
 			}
 		}
-		squareError /= (validationS + errors.get(0).size());
-		return squareError;
+		squareError = squareError / (validationS + outputSize);
+		squareErrors.add(squareError);
+	}
+
+	
+	public ArrayList<Double> getSquareErrors() {
+		return squareErrors;
 	}
 
 }

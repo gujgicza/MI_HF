@@ -66,4 +66,9 @@ public class NeuronLayer {
 			}
 		}
 	}
+
+	public void modifyWeightsAndBiases(ArrayList<ArrayList<Double>> parcialDerivates, double mu) {
+		for (int i = 0; i < parcialDerivates.size(); i++)
+			neurons.get(i).modifyWeightsAndBiases(parcialDerivates.get(i), mu);
+	}
 }

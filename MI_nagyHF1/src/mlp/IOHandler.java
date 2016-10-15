@@ -73,6 +73,26 @@ public class IOHandler {
 		return allInput;
 	}
 	
+	public ArrayList<Double> getTrainingParams(BufferedReader br) throws IOException {
+		String s = br.readLine();
+		String[] params = s.split(",");
+		ArrayList<Double> trainingParams = new ArrayList<>();
+		for (int i = 0; i < params.length; i++)
+			trainingParams.add(Double.parseDouble(params[i]));
+		return trainingParams;
+	}
+	
+	public ArrayList<ArrayList<Double>> getExpectedOutputs(ArrayList<ArrayList<Double>> allInputs, int inputSize,
+			int outputSize) {
+		ArrayList<ArrayList<Double>> expectedOutputs = new ArrayList<>();
+		for (ArrayList<Double> input : allInputs) {
+			ArrayList<Double> oneExpectedOutput = new ArrayList<>();
+			for (int i = inputSize; i < inputSize + outputSize; i++)
+				oneExpectedOutput.add(input.remove(i));
+			expectedOutputs.add(oneExpectedOutput);
+		}
+		return expectedOutputs;
+	}
 	
 	// Writer part:
 	// TODO: write to any ostream 
@@ -143,6 +163,12 @@ public class IOHandler {
 
 	public void writePartialDerivates(ArrayList<ArrayList<ArrayList<Double>>> allPartialDerivates) {
 		writeWeightsAndBiases(allPartialDerivates);	
+	}
+
+	public void writeSquareErrors(ArrayList<Double> squareErrors) {
+		for (Double double1 : squareErrors) {
+			System.out.println(double1);
+		}	
 	}
 
 }
