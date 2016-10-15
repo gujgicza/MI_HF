@@ -88,7 +88,7 @@ public class IOHandler {
 		for (ArrayList<Double> input : allInputs) {
 			ArrayList<Double> oneExpectedOutput = new ArrayList<>();
 			for (int i = inputSize; i < inputSize + outputSize; i++)
-				oneExpectedOutput.add(input.remove(i));
+				oneExpectedOutput.add(input.remove(inputSize));
 			expectedOutputs.add(oneExpectedOutput);
 		}
 		return expectedOutputs;
