@@ -46,68 +46,58 @@ public class Main {
 		setPrior(U, alfaU);
 		setPrior(V, alfaV);
 		
-		
 		calculate(20, H, U, V, alfaU, alfaV, beta);
 		calculateAndSave(30, H, U, V, alfaU, alfaV, beta);				
 	}
 	
 	public static void calculateAndSave(int iter, RealMatrix H, RealMatrix U, RealMatrix V, double alfaU, double alfaV, double beta) {
 		RealMatrix averageU = new BlockRealMatrix(U.getRowDimension(), U.getColumnDimension());
-		RealMatrix averageVT = new BlockRealMatrix(V.getRowDimension(), V.getColumnDimension());
+		RealMatrix averageV = new BlockRealMatrix(V.getRowDimension(), V.getColumnDimension());
 		
 		for (int i = 0; i < iter; i++) {
-			averageU.add(refreshMatrix(U, alfaU, beta, V, H));
-			averageVT.add(refreshMatrix(V.transpose(), alfaV, beta, U.transpose(), H.transpose()));
+			averageU = averageU.add(refreshMatrix(U, alfaU, beta, V, H));
+			averageV = averageV.add(refreshMatrix(V, alfaV, beta, U, H.transpose()));
 		}
 		
-		averageU.scalarMultiply(1/iter);
-		averageVT.scalarMultiply(1/iter);
+		averageU = averageU.scalarMultiply(1.0/iter);
+		averageV = averageV.scalarMultiply(1.0/iter);
 		
-		writeMatrixTranspose(MatrixUtils.inverse(averageU));
-		writeMatrixTranspose(MatrixUtils.inverse(averageVT));
+		writeMatrixTranspose(averageU);
+		writeMatrixTranspose(averageV);
 
 	}
 	
 	public static void calculate(int iter, RealMatrix H, RealMatrix U, RealMatrix V, double alfaU, double alfaV, double beta) {
 		for (int i = 0; i < iter; i++) {
 			refreshMatrix(U, alfaU, beta, V, H);
-			refreshMatrix(V.transpose(), alfaV, beta, U.transpose(), H.transpose());
+			refreshMatrix(V, alfaV, beta, U, H.transpose());
 		}
 	}
 	
 	public static RealMatrix refreshMatrix(RealMatrix matrix, double alfa, double beta, RealMatrix otherMatrix, RealMatrix H) {
 		RealMatrix lambda = calculateLambda(beta, otherMatrix, alfa);
 		RealMatrix lambdaInverse = MatrixUtils.inverse(lambda);
-		
-		int I = matrix.getRowDimension();
-		for (int i = 0; i < I; i++) {
-			RealMatrix psi = calculatePsi(lambdaInverse, beta, H, otherMatrix, i, alfa);
-			modifyRow(matrix, psi, lambdaInverse, i);
+
+		RealMatrix psi;
+		for (int j = 0; j < matrix.getColumnDimension(); j++) {
+			psi = calculatePsi(lambdaInverse, beta, H, otherMatrix, j);
+			modifyColumn(matrix, psi, lambdaInverse, j);
 		}
 		return matrix;
 	}
 	
-	public static RealMatrix calculatePsi(RealMatrix lambda, double beta, RealMatrix H, RealMatrix otherMatrix,
-			int i, double alfa) {
+	public static RealMatrix calculatePsi(RealMatrix lambdaInverse, double beta, RealMatrix H, RealMatrix otherMatrix, int i) {
 		RealMatrix Htrans = H.getRowMatrix(i).transpose();
 		RealMatrix psi = Htrans.preMultiply(otherMatrix);
 		psi = psi.scalarMultiply(beta);
-		RealMatrix lambdaInverse = MatrixUtils.inverse(lambda);
 		psi = psi.preMultiply(lambdaInverse);
 		return psi;
 	}
 	
 	public static RealMatrix calculateLambda(double beta, RealMatrix otherMatrix, double alfa) {
-		//int J = otherMatrix.getColumnDimension();
 		int L = otherMatrix.getRowDimension();
 		RealMatrix lambda = new BlockRealMatrix(L, L);
-//		RealMatrix vector;
-//		RealMatrix vectorT;
-//		for (int j = 0; j < J; j++) {
-//			vector = otherMatrix.getColumnMatrix(j);
-//			vectorT = otherMatrix.getColumnMatrix(j).transpose();
-//			lambda = lambda.add(vector.multiply(vectorT));
-//		}
+
 		lambda = otherMatrix.multiply(otherMatrix.transpose());
 		lambda = lambda.scalarMultiply(beta);
 		RealMatrix identityMatrix = MatrixUtils.createRealIdentityMatrix(L);
@@ -115,12 +105,12 @@ public class Main {
 		return lambda;
 	}
 	
-	public static void modifyRow(RealMatrix matrix, RealMatrix meansVec, RealMatrix covariancesMatrix, int row) {
+	public static void modifyColumn(RealMatrix matrix, RealMatrix meansVec, RealMatrix covariancesMatrix, int col) {
 		double[] means = meansVec.getColumn(0);
 		double[][] covariances = covariancesMatrix.getData();
 
 		MultivariateNormalDistribution normalDist = new MultivariateNormalDistribution(means, covariances);
-		matrix.setColumn(row, normalDist.sample());
+		matrix.setColumn(col, normalDist.sample());
 	}
 		
 	public static void setPrior(RealMatrix matrix, double alfa) {
@@ -135,15 +125,16 @@ public class Main {
 		
 	public static void writeMatrixTranspose(RealMatrix matrix) {
 		RealMatrix matrixT = matrix.transpose();
-		for (int i = 0; i < matrixT.getRowDimension(); i++) {
+		StringBuilder matrixString = new StringBuilder();
+		for (int i = 0; i < matrixT.getRowDimension(); i++) {		
 			for ( int j = 0; j < matrixT.getColumnDimension(); j++) {
 				if (j == 0) {
-					System.out.println(matrixT.getEntry(i, j));
+					matrixString.append(matrixT.getEntry(i, j));
 				}
-				else System.out.println(matrixT.getEntry(i, j) + ",");		
+				else matrixString.append("," + matrixT.getEntry(i, j));		
 			}
-			if (i != 0)
-				System.out.println("\n");
-		}			
+			matrixString.append("\n");
+		}
+		System.out.println(matrixString);
 	}
 }
