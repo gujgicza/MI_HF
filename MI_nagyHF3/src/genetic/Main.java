@@ -46,12 +46,20 @@ public class Main {
 		Entity best = population.population.get(0);
 		BackPack solution = best.fenotype;
 		
+		boolean isFirstLine = true;
 		for (int i = 0; i < solution.height; i++) {
+			if (isFirstLine)
+				isFirstLine = false;
+			else
+				System.out.print("\n");
+			boolean isFirstNum = true;
 			for (int j = 0; j < solution.width; j++) {
+				if (isFirstNum)
+					isFirstNum = false;
+				else
+					System.out.print("\t");
 				System.out.print(solution.matrix[i][j]);
-				System.out.print("\t");
 			}
-			System.out.print("\n");
 		}
 	}
 
