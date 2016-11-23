@@ -17,8 +17,23 @@ public class BackPack {
 	}
 	
 	private void packing(List<Item> items, List<Integer> genotype) {
-		// TODO Auto-generated method stub
-		
+		// TODO lehetne szebb....
+		// in order of the permutation (genotype) try to fit the items to the backpack
+		for (Integer number : genotype) {
+			Item currItem = items.get(number);
+			searchPlace:							// lehet rossz
+			for (int i = 0; i < height; i++)
+				for (int j = 0; j < width; j ++)
+					if (matrix[i][j] == 0) {
+						// item fits in
+						if (height-i >= currItem.height && width-j >= currItem.width) {
+							for (int itemI = i; itemI < i + currItem.height; itemI++)
+								for (int itemJ = j; itemJ < j + currItem.width; itemJ++)
+									matrix[itemI][itemJ] = number;
+							break searchPlace;
+						}
+					}
+		}
 	}
 
 	public int getZeros() {
