@@ -1,6 +1,7 @@
 package genetic;
 
 import java.util.List;
+import java.util.Random;
 
 public class Entity {
 	List<Item> items;
@@ -13,6 +14,7 @@ public class Entity {
 		this.items = items;
 		
 		this.genotype = gen;
+		mutate();
 		fenotype = new BackPack(x, y, items, genotype);
 		calculateFittness();
 	}
@@ -27,8 +29,12 @@ public class Entity {
 		return fittness;
 	}
 	
+	// insert mutation
 	public void mutate() {
-		// TODO
+		int index1 = new Random().nextInt(genotype.size()-1);
+		int index2 = new Random().nextInt(genotype.size()-1);
+		int element = genotype.remove(index1);
+		genotype.add(index2, element);
 	}
 	
 	public Entity crossover(Entity otherParent){
