@@ -24,12 +24,6 @@ public class Entity {
 		fittness = fenotype.getZeros();
 	}
 	
-	public Integer getFittness() {
-		if (fittness == null)
-			calculateFittness();
-		return fittness;
-	}
-	
 	// insert mutation
 	public void mutate() {
 		int index1 = new Random().nextInt(genotype.size()-1);
@@ -93,7 +87,6 @@ public class Entity {
 
 	    return aL;
 	}
-	
 }
 
 

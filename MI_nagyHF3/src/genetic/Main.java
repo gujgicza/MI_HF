@@ -30,19 +30,20 @@ public class Main {
 			items.add(new Item(Integer.parseInt(params[0]), Integer.parseInt(params[1])));
 		}
 		
-		// parameters:
+		// parameters
 		double mutateCh = 0.3;
 		int entityNumInGen = 10;
 		int maxGen = 15;
+		double parentRatio = 0.3;
 		
 		// create the first population
-		Population population = new Population(items, backpackWidth, backpackHeight, mutateCh, entityNumInGen, maxGen);
+		Population population = new Population(items, backpackWidth, backpackHeight, mutateCh, entityNumInGen, maxGen, parentRatio);
 		
 		// find the optimum
 		population.evolve();
 		
 		// write out the matrix
-		population.sortPop();
+		//population.sortPop();
 		Entity best = population.population.get(0);
 		BackPack solution = best.fenotype;
 		
