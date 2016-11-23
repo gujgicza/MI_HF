@@ -13,20 +13,20 @@ public class Main {
 		
 		// 1. line backpack
 		String s = br.readLine();
-		String[] params = s.split(" ");		
+		String[] params = s.split("\t");		
 		int backpackHeight = Integer.parseInt(params[0]);
 		int backpackWidth = Integer.parseInt(params[1]);
 				
 		// 2. line number of items
 		s = br.readLine();
-		params = s.split(" ");	
+		params = s.split("\t");	
 		int itemNum = Integer.parseInt(params[0]);
 		
 		// item parameters
 		List<Item> items = new ArrayList<>();
 		for (int i = 0; i < itemNum; i++) {
 			s = br.readLine();
-			params = s.split(" ");
+			params = s.split("\t");
 			items.add(new Item(Integer.parseInt(params[0]), Integer.parseInt(params[1])));
 		}
 		
@@ -49,7 +49,7 @@ public class Main {
 		for (int i = 0; i < solution.height; i++) {
 			for (int j = 0; j < solution.width; j++) {
 				System.out.print(solution.matrix[i][j]);
-				System.out.print(" ");
+				System.out.print("\t");
 			}
 			System.out.print("\n");
 		}
