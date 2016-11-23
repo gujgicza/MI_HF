@@ -53,4 +53,26 @@ public class BackPack {
 		return zeroNum;
 	}
 
+	public int getZeroFieldsNum() {
+		int fieldNum = 0;
+		boolean isNewField;
+		
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				isNewField = false;
+				if (matrix[i][j] == 0) {
+					isNewField = true;
+					if (i > 0 && matrix[i-1][j] == 0)
+						isNewField = false;
+					if (j > 0 && matrix[i][j-1] == 0)
+						isNewField = false;
+				}
+				if (isNewField)
+					fieldNum += 1;
+			}
+		}
+		
+		return fieldNum;
+	}
+
 }

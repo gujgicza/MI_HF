@@ -2,6 +2,7 @@ package genetic;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 
@@ -20,7 +21,7 @@ public class Population {
 	
 	int currentGeneration;
 	
-	public Population(List<Item> items, int backpackW, int backpackH, double mutateCh, int entityNumInGen, int maxGen, double parentRatio) {
+	public Population(List<Item> items, int backpackW, int backpackH, double mutateCh, int entityNumInGen, int maxGen) {
 		this.items = items;
 		backpackWidth = backpackW;
 		backpackHeight = backpackH;
@@ -28,7 +29,6 @@ public class Population {
 		mutateChance = mutateCh;
 		entityNumInGeneration = entityNumInGen;
 		maxGenerations = maxGen;
-		chooseRatio = parentRatio;
 		
 		population = new ArrayList<Entity>();
 		// create the first (random) population
@@ -46,18 +46,18 @@ public class Population {
 	}
 	
 	public void evolve() {
-		Random rand = new Random();
 		List<Entity> parents = new ArrayList<>();
 		
+		sortPop();
 		for (int generation = 0; generation < maxGenerations; generation++) {
-			parents = new ArrayList<>(chooseParents());
 			Entity parent1;
 			Entity parent2;
 			
-			for (int childNum = 0; childNum < parents.size(); childNum++) {
-				parent1 = parents.get(rand.nextInt(parents.size()));
-				parent2 = parents.get(rand.nextInt(parents.size()));
+			for (int childNum = 0; childNum < parents.size() * 2; childNum++) {
+				parent1 = chooseParent();
+				parent2 = chooseParent();
 				population.add(parent1.crossover(parent2));
+				//population.add(parent2.crossover(parent1));
 			}
 			sortPop();
 			population = population.subList(0, entityNumInGeneration);
@@ -65,13 +65,25 @@ public class Population {
 	}
 
 	private void sortPop() {
-		Collections.sort(population, 
-				(a, b) -> a.fittness < b.fittness ? -1 : a.fittness == b.fittness ? 0 : 1); // ez is rossz lehet
+		//Collections.sort(population, 
+				//(a, b) -> a.fittness < b.fittness ? -1 : 1);
+			//	(a, b) -> a.fittness < b.fittness ? -1 : a.fittness == b.fittness ? 0 : 1); // ez is rossz lehet
+		Collections.sort(population, new Comparator<Entity>() {
+		    public int compare(Entity m1, Entity m2) {
+		        return Integer.compare(m1.fittness, m2.fittness);
+		    }
+		});
 	}
 	
-	private List<Entity> chooseParents() {
-		sortPop();
-		List<Entity> parents = population.subList(0, (int) Math.floor(entityNumInGeneration*chooseRatio));
-		return parents;
+	// scaling
+	private Entity chooseParent() {
+		int randNum = new Random().nextInt((int)((entityNumInGeneration + 1.0) * (entityNumInGeneration / 2.0)));
+
+		int index;
+		int scale = entityNumInGeneration;
+		for (index = 0; randNum < scale; index++)
+			scale += scale-1;
+		
+		return population.get(index);
 	}
 }

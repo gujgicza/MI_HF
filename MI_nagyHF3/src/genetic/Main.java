@@ -31,13 +31,12 @@ public class Main {
 		}
 		
 		// parameters
-		double mutateCh = 0.3;
-		int entityNumInGen = 10;
-		int maxGen = 15;
-		double parentRatio = 0.3;
+		double mutateCh = 0.4;
+		int entityNumInGen = 80;
+		int maxGen = 1000;
 		
 		// create the first population
-		Population population = new Population(items, backpackWidth, backpackHeight, mutateCh, entityNumInGen, maxGen, parentRatio);
+		Population population = new Population(items, backpackWidth, backpackHeight, mutateCh, entityNumInGen, maxGen);
 		
 		// find the optimum
 		population.evolve();

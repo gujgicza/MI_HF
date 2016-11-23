@@ -21,7 +21,7 @@ public class Entity {
 	}
 	
 	public void calculateFittness() {
-		fittness = fenotype.getZeros();
+		fittness = fenotype.getZeros() * fenotype.getZeroFieldsNum();
 	}
 	
 	// insert mutation
