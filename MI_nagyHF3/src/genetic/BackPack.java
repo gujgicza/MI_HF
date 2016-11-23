@@ -29,7 +29,7 @@ public class BackPack {
 						if (height-i >= currItem.height && width-j >= currItem.width) {
 							for (int itemI = i; itemI < i + currItem.height; itemI++)
 								for (int itemJ = j; itemJ < j + currItem.width; itemJ++)
-									matrix[itemI][itemJ] = number;
+									matrix[itemI][itemJ] = number + 1; // because the index starts with 0
 							break searchPlace;
 						}
 					}

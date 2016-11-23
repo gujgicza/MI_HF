@@ -43,7 +43,6 @@ public class Main {
 		population.evolve();
 		
 		// write out the matrix
-		//population.sortPop();
 		Entity best = population.population.get(0);
 		BackPack solution = best.fenotype;
 		

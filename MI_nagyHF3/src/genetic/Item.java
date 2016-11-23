@@ -5,8 +5,8 @@ public class Item {
 	int height;
 	
 	public Item(int x, int y) {
-		width = x;
-		height = y;
+		height = x;
+		width = y;
 	}
 	
 	public int getWidth() {

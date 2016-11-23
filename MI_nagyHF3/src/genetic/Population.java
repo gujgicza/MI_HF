@@ -47,10 +47,10 @@ public class Population {
 	
 	public void evolve() {
 		Random rand = new Random();
-		ArrayList<Entity> parents = new ArrayList<>();
+		List<Entity> parents = new ArrayList<>();
 		
 		for (int generation = 0; generation < maxGenerations; generation++) {
-			parents = chooseParents();
+			parents = new ArrayList<>(chooseParents());
 			Entity parent1;
 			Entity parent2;
 			
@@ -66,13 +66,12 @@ public class Population {
 
 	private void sortPop() {
 		Collections.sort(population, 
-				(a, b) -> a.fittness < b.fittness ? 1 : a.fittness == b.fittness ? 0 : -1); // ez is rossz lehet
+				(a, b) -> a.fittness < b.fittness ? -1 : a.fittness == b.fittness ? 0 : 1); // ez is rossz lehet
 	}
 	
-	private ArrayList<Entity> chooseParents() {
+	private List<Entity> chooseParents() {
 		sortPop();
-		ArrayList<Entity> parents = (ArrayList<Entity>) 
-				population.subList(0, (int) Math.floor(entityNumInGeneration*chooseRatio));
+		List<Entity> parents = population.subList(0, (int) Math.floor(entityNumInGeneration*chooseRatio));
 		return parents;
 	}
 }
