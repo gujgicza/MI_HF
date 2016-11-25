@@ -74,4 +74,44 @@ public class BackPack {
 		return fieldNum;
 	}
 
+	public int getZeroRowsNum() {
+		int rowNum = 0;
+		boolean isNewRow;
+		
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				isNewRow = false;
+				if (matrix[i][j] == 0) {
+					isNewRow = true;
+					if (j > 0 && matrix[i][j-1] == 0)
+						isNewRow = false;
+				}
+				if (isNewRow)
+					rowNum += 1;
+			}
+		}
+		
+		return rowNum;
+	}
+
+	public int getZeroColsNum() {
+		int colNum = 0;
+		boolean isNewCol;
+		
+		for (int i = 0; i < height; i++) {
+			for (int j = 0; j < width; j++) {
+				isNewCol = false;
+				if (matrix[i][j] == 0) {
+					isNewCol = true;
+					if (i > 0 && matrix[i-1][j] == 0)
+						isNewCol = false;
+				}
+				if (isNewCol)
+					colNum += 1;
+			}
+		}
+		
+		return colNum;
+	}
+
 }

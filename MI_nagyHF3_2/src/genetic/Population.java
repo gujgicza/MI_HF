@@ -18,6 +18,20 @@ public class Population {
 	int entityNumInGeneration;
 	int maxGenerations;
 	double chooseRatio;
+	
+	public Entity firstFitDecreasing() {
+		List<Integer> gen = new ArrayList<>();
+		for (int j = 0; j < items.size(); j++)
+			gen.add(j);
+		
+		Collections.sort(gen, new Comparator<Integer>() {
+			@Override
+			public int compare(Integer o1, Integer o2) {
+				return Integer.compare(items.get(o2).height * items.get(o2).width, items.get(o1).height * items.get(o1).width);
+			}		
+		});
+		return new Entity(backpackWidth, backpackHeight, items, gen);
+	}
 		
 	public Population(List<Item> items, int backpackW, int backpackH, double mutateCh, int entityNumInGen, int maxGen) {
 		this.items = items;
@@ -31,20 +45,12 @@ public class Population {
 		population = new ArrayList<Entity>();
 		// create the first (random) population
 		for (int i = 0; i < entityNumInGeneration-1; i++) {			
-			List<Integer> gen = new ArrayList<>();
-			for (int j = 0; j < items.size(); j++)
-				gen.add(j);
-			
-			Collections.sort(gen, new Comparator<Integer>() {
-				@Override
-				public int compare(Integer o1, Integer o2) {
-					return Integer.compare(items.get(o2).height * items.get(o2).width, items.get(o1).height * items.get(o1).width);
-				}		
-			});
-			Entity en = new Entity(backpackWidth, backpackHeight, items, gen);
+			Entity en = firstFitDecreasing();
 			en.mutate(mutateCh);
 			population.add(en);
-		}		
+		}	
+		population.add(firstFitDecreasing());
+		
 		sortPop();		
 	}
 	
@@ -56,10 +62,12 @@ public class Population {
 			
 			for (int childNum = 0; childNum < entityNumInGeneration; childNum++) {
 				parent = chooseParent();
+				//parent = population.get(new Random().nextInt(entityNumInGeneration/3));
 				child = new Entity(parent.fenotype.width, parent.fenotype.height, items, parent.genotype);
 				child.mutate(mutateChance);
 				population.add(child);
 			}
+			population.add(firstFitDecreasing());
 			sortPop();
 			population = population.subList(0, entityNumInGeneration);
 		}
@@ -68,12 +76,13 @@ public class Population {
 	private void sortPop() {
 		Collections.sort(population, new Comparator<Entity>() {
 		    public int compare(Entity m1, Entity m2) {
-		    	if (m1.fittness > m2.fittness)
-		    		return 1;
-		    	if (m2.fittness > m1.fittness)
-		    		return -1;
-		    	else
-		    		return Integer.compare(m1.fenotype.getZeros(), m2.fenotype.getZeros());
+//		    	if (m1.fittness > m2.fittness)
+//		    		return 1;
+//		    	if (m2.fittness > m1.fittness)
+//		    		return -1;
+//		    	else
+//		    		return Integer.compare(m1.fenotype.getZeros(), m2.fenotype.getZeros());
+		    	return Integer.compare(m1.fittness, m2.fittness);
 		    }
 		});
 	}

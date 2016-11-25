@@ -31,12 +31,26 @@ public class Population {
 		population = new ArrayList<Entity>();
 		// create the first (random) population
 		for (int i = 0; i < entityNumInGeneration-1; i++) {
+//			List<Integer> gen = new ArrayList<>();
+//			// create random permutation
+//			for (int j = 0; j < items.size(); j++)
+//				gen.add(j);
+//			java.util.Collections.shuffle(gen);
+//			population.add(new Entity(backpackWidth, backpackHeight, items, gen));
+			
 			List<Integer> gen = new ArrayList<>();
-			// create random permutation
 			for (int j = 0; j < items.size(); j++)
 				gen.add(j);
-			java.util.Collections.shuffle(gen);
-			population.add(new Entity(backpackWidth, backpackHeight, items, gen));
+			
+			Collections.sort(gen, new Comparator<Integer>() {
+				@Override
+				public int compare(Integer o1, Integer o2) {
+					return Integer.compare(items.get(o2).height * items.get(o2).width, items.get(o1).height * items.get(o1).width);
+				}		
+			});
+			Entity en = new Entity(backpackWidth, backpackHeight, items, gen);
+			en.mutate(1);
+			population.add(en);
 		}
 		// add one with permutation of decreasing item size
 		List<Integer> gen = new ArrayList<>();
@@ -61,11 +75,12 @@ public class Population {
 			Entity parent1;
 			Entity parent2;
 			
-			for (int childNum = 0; childNum < entityNumInGeneration/2; childNum++) {
+			for (int childNum = 0; childNum < entityNumInGeneration*(2/5); childNum++) {
 				parent1 = chooseParent();
 				parent2 = chooseParent();
 				population.add(parent1.crossover(parent2, mutateChance));
 			}
+			
 			sortPop();
 			population = population.subList(0, entityNumInGeneration);
 		}
@@ -74,22 +89,28 @@ public class Population {
 	private void sortPop() {
 		Collections.sort(population, new Comparator<Entity>() {
 		    public int compare(Entity m1, Entity m2) {
-		        return Integer.compare(m1.fittness, m2.fittness);
+		    	if (m1.fittness > m2.fittness)
+		    		return 1;
+		    	if (m2.fittness > m1.fittness)
+		    		return -1;
+		    	else
+		    		return Integer.compare(m1.fenotype.getZeros(), m2.fenotype.getZeros());
 		    }
 		});
 	}
 	
 	// scaling: exponential
 	private Entity chooseParent() {
+		double rate = 0.95;
 		double scale1 = 0.0;
 		for (int i = 0; i < entityNumInGeneration; i++)
-			scale1 += entityNumInGeneration * Math.pow(0.75, i);
+			scale1 += entityNumInGeneration * Math.pow(rate, i);
 		double randNum = new Random().nextDouble()*scale1;		
 
 		int index;
 		double scale2 = entityNumInGeneration;
 		for (index = 0; randNum > scale2; index++)
-			scale2 += scale2*0.75;
+			scale2 += scale2*rate;
 
 		return population.get(index);
 	}

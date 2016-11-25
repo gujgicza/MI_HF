@@ -1,6 +1,5 @@
 package genetic;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -20,7 +19,7 @@ public class Entity {
 	}
 	
 	public void calculateFittness() {
-		fittness = fenotype.getZeros() * fenotype.getZeroFieldsNum();
+		fittness = fenotype.getZeroRowsNum() * fenotype.getZeroColsNum();
 	}
 	
 	// insert mutation
