@@ -30,38 +30,43 @@ public class Main {
 			items.add(new Item(Integer.parseInt(params[0]), Integer.parseInt(params[1])));
 		}
 		
-		// try 3 different algorithm
+		// try 6 different algorithm
 		Algorithm alg = new Algorithm(items, backpackWidth, backpackHeight);
+		List<BackPack> solutions = new ArrayList<>();
 		
 		List<Integer> orderD = alg.firstFitDecreasing();		
-		BackPack solutionD = new BackPack(backpackWidth, backpackHeight, items, orderD);
-		
+		solutions.add(new BackPack(backpackWidth, backpackHeight, items, orderD, true));
+		solutions.add(new BackPack(backpackWidth, backpackHeight, items, orderD, false));
+
 		List<Integer> orderH = alg.firstFitDecreasingHeight();		
-		BackPack solutionH = new BackPack(backpackWidth, backpackHeight, items, orderH);
-		
+		solutions.add(new BackPack(backpackWidth, backpackHeight, items, orderH, true));
+		solutions.add(new BackPack(backpackWidth, backpackHeight, items, orderH, false));
+
 		List<Integer> orderW = alg.firstFitDecreasingWidth();		
-		BackPack solutionW = new BackPack(backpackWidth, backpackHeight, items, orderW);
+		solutions.add(new BackPack(backpackWidth, backpackHeight, items, orderW, true));
+		solutions.add(new BackPack(backpackWidth, backpackHeight, items, orderW, false));
+
 		
 		// choose the minimum
-		BackPack solution = solutionD;
-		if (solution.getZeros() > solutionH.getZeros())
-			solution = solutionH;
-		if (solution.getZeros() > solutionW.getZeros())
-			solution = solutionW;
+		BackPack bestSolution = solutions.get(0);
+		for (int i = 0; i < solutions.size(); i++)
+			if (solutions.get(i).getZeros() < bestSolution.getZeros())
+				bestSolution = solutions.get(i);
 		
+		// writing out
 		boolean isFirstLine = true;
-		for (int i = 0; i < solution.height; i++) {
+		for (int i = 0; i < bestSolution.height; i++) {
 			if (isFirstLine)
 				isFirstLine = false;
 			else
 				System.out.print("\n");
 			boolean isFirstNum = true;
-			for (int j = 0; j < solution.width; j++) {
+			for (int j = 0; j < bestSolution.width; j++) {
 				if (isFirstNum)
 					isFirstNum = false;
 				else
 					System.out.print("\t");
-				System.out.print(solution.matrix[i][j]);
+				System.out.print(bestSolution.matrix[i][j]);
 			}
 		}
 	}
