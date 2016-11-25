@@ -61,11 +61,10 @@ public class Population {
 			Entity parent1;
 			Entity parent2;
 			
-			for (int childNum = 0; childNum < entityNumInGeneration/3; childNum++) {
+			for (int childNum = 0; childNum < entityNumInGeneration/2; childNum++) {
 				parent1 = chooseParent();
 				parent2 = chooseParent();
-				population.add(parent1.crossover(parent2));
-				//population.add(parent2.crossover(parent1));
+				population.add(parent1.crossover(parent2, mutateChance));
 			}
 			sortPop();
 			population = population.subList(0, entityNumInGeneration);
@@ -80,14 +79,18 @@ public class Population {
 		});
 	}
 	
-	// scaling
+	// roulette
 	private Entity chooseParent() {
-		int randNum = new Random().nextInt((int)((entityNumInGeneration + 1.0) * (entityNumInGeneration / 2.0)));
+		double sumFittnes = 0;
+		for (Entity entity : population) {
+			sumFittnes += 1.0/entity.fittness;
+		}
+		double randNum = new Random().nextDouble()*sumFittnes;
 
 		int index;
-		int scale = entityNumInGeneration;
-		for (index = 0; randNum > scale; index++)
-			scale += scale-1;
+		double scale = sumFittnes;
+		for (index = 0; randNum < scale; index++)
+			scale -= scale-(1.0/population.get(index).fittness);
 		
 		return population.get(index);
 	}

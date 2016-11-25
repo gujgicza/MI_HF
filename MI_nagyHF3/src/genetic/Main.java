@@ -32,8 +32,8 @@ public class Main {
 		
 		// parameters
 		double mutateCh = 0.3;
-		int entityNumInGen = 20;
-		int maxGen = 500;
+		int entityNumInGen = 10;
+		int maxGen = 120;
 		
 		// create the first population
 		Population population = new Population(items, backpackWidth, backpackHeight, mutateCh, entityNumInGen, maxGen);

@@ -15,27 +15,30 @@ public class Entity {
 		this.items = items;
 		
 		this.genotype = gen;
-		mutate();
 		fenotype = new BackPack(x, y, items, genotype);
 		calculateFittness();
 	}
 	
 	public void calculateFittness() {
-		fittness = fenotype.getZeros() * fenotype.getZeroFieldsNum() * fenotype.getZeroFieldsNum();
+		fittness = fenotype.getZeros() * fenotype.getZeroFieldsNum();
 	}
 	
 	// insert mutation
-	public void mutate() {
-		int index1 = new Random().nextInt(genotype.size()-1);
-		int index2 = new Random().nextInt(genotype.size()-1);
-		int element = genotype.remove(index1);
-		genotype.add(index2, element);
+	public void mutate(double mutateCh) {
+		Random rand = new Random();
+		if (rand.nextDouble() < mutateCh) {
+			int index1 = rand.nextInt(genotype.size()-1);
+			int index2 = rand.nextInt(genotype.size()-1);
+			int element = genotype.remove(index1);
+			genotype.add(index2, element);
+		}
 	}
 	
 	// order crossover
-	public Entity crossover(Entity otherParent){
-		int index1 = new Random().nextInt(genotype.size());
-		int index2 = new Random().nextInt(genotype.size()-index1) + index1;
+	public Entity crossover(Entity otherParent, double mutateCh){
+		Random rand = new Random();
+		int index1 = rand.nextInt(genotype.size()/2);
+		int index2 = rand.nextInt(genotype.size()-index1) + index1;
 		
 		ArrayList<Integer> childGen = new ArrayList<>();
 
@@ -53,6 +56,8 @@ public class Entity {
 		rotateRight(childGen, index1);
 		
 		Entity child = new Entity(fenotype.width, fenotype.height, items, childGen);
+		
+		child.mutate(mutateCh);
 		return child;
 	}
 	
