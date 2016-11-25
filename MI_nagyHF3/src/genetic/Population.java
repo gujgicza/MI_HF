@@ -79,19 +79,18 @@ public class Population {
 		});
 	}
 	
-	// roulette
+	// scaling: exponential
 	private Entity chooseParent() {
-		double sumFittnes = 0;
-		for (Entity entity : population) {
-			sumFittnes += 1.0/entity.fittness;
-		}
-		double randNum = new Random().nextDouble()*sumFittnes;
+		double scale1 = 0.0;
+		for (int i = 0; i < entityNumInGeneration; i++)
+			scale1 += entityNumInGeneration * Math.pow(0.75, i);
+		double randNum = new Random().nextDouble()*scale1;		
 
 		int index;
-		double scale = sumFittnes;
-		for (index = 0; randNum < scale; index++)
-			scale -= scale-(1.0/population.get(index).fittness);
-		
+		double scale2 = entityNumInGeneration;
+		for (index = 0; randNum > scale2; index++)
+			scale2 += scale2*0.75;
+
 		return population.get(index);
 	}
 }
