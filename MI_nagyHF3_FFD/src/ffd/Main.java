@@ -30,13 +30,21 @@ public class Main {
 			items.add(new Item(Integer.parseInt(params[0]), Integer.parseInt(params[1])));
 		}
 		
-		// try 6 different algorithm
+		// try 10 different algorithm
 		Algorithm alg = new Algorithm(items, backpackWidth, backpackHeight);
 		List<BackPack> solutions = new ArrayList<>();
 		
-		List<Integer> orderD = alg.firstFitDecreasing();		
-		solutions.add(new BackPack(backpackWidth, backpackHeight, items, orderD, true));
-		solutions.add(new BackPack(backpackWidth, backpackHeight, items, orderD, false));
+		List<Integer> order = alg.noSort();
+		solutions.add(new BackPack(backpackWidth, backpackHeight, items, order, true));
+		solutions.add(new BackPack(backpackWidth, backpackHeight, items, order, false));
+		
+		List<Integer> orderDAH = alg.firstFitDecreasingAreaHeight();		
+		solutions.add(new BackPack(backpackWidth, backpackHeight, items, orderDAH, true));
+		solutions.add(new BackPack(backpackWidth, backpackHeight, items, orderDAH, false));
+		
+		List<Integer> orderDAW = alg.firstFitDecreasingAreaWidth();		
+		solutions.add(new BackPack(backpackWidth, backpackHeight, items, orderDAW, true));
+		solutions.add(new BackPack(backpackWidth, backpackHeight, items, orderDAW, false));
 
 		List<Integer> orderH = alg.firstFitDecreasingHeight();		
 		solutions.add(new BackPack(backpackWidth, backpackHeight, items, orderH, true));
@@ -47,7 +55,7 @@ public class Main {
 		solutions.add(new BackPack(backpackWidth, backpackHeight, items, orderW, false));
 
 		
-		// choose the minimum
+		// choose the best
 		BackPack bestSolution = solutions.get(0);
 		for (int i = 0; i < solutions.size(); i++)
 			if (solutions.get(i).getZeros() < bestSolution.getZeros())

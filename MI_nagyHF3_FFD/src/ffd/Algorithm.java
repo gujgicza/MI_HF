@@ -18,7 +18,7 @@ public class Algorithm {
 		
 	}
 	
-	public List<Integer> firstFitDecreasing() {
+	public List<Integer> firstFitDecreasingAreaHeight() {
 		List<Integer> order = new ArrayList<>();
 		for (int j = 0; j < items.size(); j++)
 			order.add(j);
@@ -26,13 +26,37 @@ public class Algorithm {
 		Collections.sort(order, new Comparator<Integer>() {
 			@Override
 			public int compare(Integer o1, Integer o2) {
+				if (items.get(o2).height * items.get(o2).width == items.get(o1).height * items.get(o1).width)
+					return Integer.compare(items.get(o2).height, items.get(o1).height);
 				return Integer.compare(items.get(o2).height * items.get(o2).width, items.get(o1).height * items.get(o1).width);
 			}		
 		});
+		return order;
+	}
+	
+	public List<Integer> firstFitDecreasingAreaWidth() {
+		List<Integer> order = new ArrayList<>();
+		for (int j = 0; j < items.size(); j++)
+			order.add(j);
 		
+		Collections.sort(order, new Comparator<Integer>() {
+			@Override
+			public int compare(Integer o1, Integer o2) {
+				if (items.get(o2).height * items.get(o2).width == items.get(o1).height * items.get(o1).width)
+					return Integer.compare(items.get(o2).width, items.get(o1).width);
+				return Integer.compare(items.get(o2).height * items.get(o2).width, items.get(o1).height * items.get(o1).width);
+			}		
+		});
 		return order;
 	}
 
+	public List<Integer> noSort() {
+		List<Integer> order = new ArrayList<>();
+		for (int j = 0; j < items.size(); j++)
+			order.add(j);
+		return order;
+	}
+	
 	public List<Integer> firstFitDecreasingHeight() {
 		List<Integer> order = new ArrayList<>();
 		for (int j = 0; j < items.size(); j++)
@@ -41,6 +65,8 @@ public class Algorithm {
 		Collections.sort(order, new Comparator<Integer>() {
 			@Override
 			public int compare(Integer o1, Integer o2) {
+				if (items.get(o2).height == items.get(o1).height)
+					return Integer.compare(items.get(o2).width, items.get(o1).width);
 				return Integer.compare(items.get(o2).height, items.get(o1).height);
 			}		
 		});
@@ -56,6 +82,8 @@ public class Algorithm {
 		Collections.sort(order, new Comparator<Integer>() {
 			@Override
 			public int compare(Integer o1, Integer o2) {
+				if (items.get(o2).width == items.get(o1).width)
+					return Integer.compare(items.get(o2).height, items.get(o1).height);
 				return Integer.compare(items.get(o2).width, items.get(o1).width);
 			}		
 		});
