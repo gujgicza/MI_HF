@@ -4,9 +4,9 @@ public class Item {
 	int width;
 	int height;
 	
-	public Item(int x, int y) {
-		height = x;
-		width = y;
+	public Item(int height, int width) {
+		this.height = height;
+		this.width = width;
 	}
 	
 	public int getWidth() {
