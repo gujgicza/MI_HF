@@ -3,7 +3,6 @@ package textgenerator;
 import java.util.ArrayList;
 
 public class MarkovLink {
-	// A single link in a markov chain
 	String prefix1 = "";
 	String prefix2 = "";
 	ArrayList<String> suffixes = new ArrayList<String>();
@@ -31,7 +30,6 @@ public class MarkovLink {
 	public String[] getChoiceArray() {
 		ArrayList<String> choices = new ArrayList<String>();
 		String[] suf = suffixes.toArray(new String[suffixes.size()]);
-		// int[] mul = multiplicity.toArray(new int[suffixes.size()]);
 		for (int i = 0; i < suf.length; i++) {
 			int count = (int) (multiplicity.get(i));
 			while (count != 0) {

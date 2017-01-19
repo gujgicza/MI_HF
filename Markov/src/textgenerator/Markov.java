@@ -39,7 +39,6 @@ public class Markov {
 					new InputStreamReader(new FileInputStream(file), Charset.forName("UTF-8")));
 			while ((line = br.readLine()) != null) {
 				words = line.split("\\s+");
-				// System.out.println(line);
 				for (int i = 0; i < words.length; i++) {
 					queue.add(words[i]);
 					String key = queue.get(0) + " " + queue.get(1);
@@ -55,8 +54,6 @@ public class Markov {
 			queue.add("");
 			MarkovLink link = new MarkovLink(queue.get(0), queue.get(1));
 			link.addSuffix(queue.get(2));
-			// System.out.println("LAST ENTRY: "+queue.get(0)+" "+queue.get(1)+"
-			// : "+queue.get(2));
 			chain.put(queue.get(0) + " " + queue.get(1), link);
 		} catch (Exception e) {
 			System.out.println(e);
@@ -71,14 +68,15 @@ public class Markov {
 		queue.add("");
 		String output = "";
 		queue.add(makeChoice(chain.get(" ").getChoiceArray()));
-		// System.out.println(queue.get(2));
-		while (!queue.get(2).equals("")) {
+		//while (!queue.get(2).equals("")) {
+		for (int i = 0; i < 120; i++) {
 			if (output.equals("")) {
 				output = queue.get(2);
 			} else {
+				if (i % 10 == 0)
+					output = output + "\n";
 				output = output + " " + queue.get(2);
 			}
-			// System.out.println(output);
 			String next = makeChoice(chain.get(queue.get(1) + " " + queue.get(2)).getChoiceArray());
 			queue.add(next);
 		}

@@ -1,7 +1,6 @@
 package textgenerator;
 
 import java.util.LinkedList;
-//Code based off of post by GreyCat on StackOverflow
 public class FixedLengthQueue<E> extends LinkedList<E>
 {
 	private int limit;
